@@ -1,36 +1,55 @@
+export interface FiveWhys {
+  w1: string;
+  w2: string;
+  w3: string;
+  w4: string;
+  w5: string;
+}
+
+export interface Section1Data {
+  category: string;
+  proposedItems: string[];
+  selectedItem: string;
+  fiveWhys: FiveWhys;
+  solutionIdeas: string[];
+}
+
+export interface SmartGoal {
+  specific: string;
+  measurable: string;
+  achievable: string;
+  relevant: string;
+  timeBound: string;
+}
+
+export interface Section2Data {
+  smart: SmartGoal;
+  goalStatement: string;
+  challenges: string[];
+}
+
 export interface ActionItem {
   description: string;
   owner: string;
   dueDate: string;
 }
 
-export interface Module1Data {
-  category: string;
-  selectedItem: string;
-  ideas: string[];
+export interface Section3Data {
+  objective: string;
+  keyResults: string[];
+  actions: ActionItem[];
 }
 
-export interface Module2Data {
-  area: string;
+export interface Section4Data {
+  improvementArea: string;
   currentSituation: string;
   desiredOutcome: string;
 }
 
-export interface Module3Data {
-  goal: string;
-  challenges: string[];
-}
-
-export interface Module4Data {
-  bigGoal: string;
-  subGoals: string[];
-  actions: ActionItem[];
-}
-
 export interface WorkshopData {
   teamName: string;
-  module1: Module1Data;
-  module2: Module2Data;
-  module3: Module3Data;
-  module4: Module4Data;
+  section1: Section1Data;
+  section2: Section2Data;
+  section3: Section3Data;
+  section4: Section4Data;
 }

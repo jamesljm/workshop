@@ -11,7 +11,7 @@ import { Swords } from "lucide-react";
 
 export default function LandingPage() {
   const router = useRouter();
-  const { teamName, setTeamName, setCurrentModule, reset } = useWorkshopStore();
+  const { teamName, setTeamName, setCurrentSection, reset } = useWorkshopStore();
   const [name, setName] = useState(teamName);
 
   const handleStart = () => {
@@ -24,15 +24,15 @@ export default function LandingPage() {
       reset();
     }
     setTeamName(trimmed);
-    setCurrentModule(1);
-    router.push("/workshop/module-1");
+    setCurrentSection(1);
+    router.push("/workshop/section-1");
   };
 
   const handleResume = () => {
     const store = useWorkshopStore.getState();
-    if (store.currentModule >= 1) {
-      const mod = store.currentModule <= 4 ? store.currentModule : 5;
-      const path = mod === 5 ? "/workshop/summary" : `/workshop/module-${mod}`;
+    if (store.currentSection >= 1) {
+      const sec = store.currentSection <= 4 ? store.currentSection : 5;
+      const path = sec === 5 ? "/workshop/summary" : `/workshop/section-${sec}`;
       router.push(path);
     }
   };

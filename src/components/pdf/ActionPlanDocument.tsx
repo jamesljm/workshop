@@ -6,7 +6,7 @@ import {
   View,
   StyleSheet,
 } from "@react-pdf/renderer";
-import type { WorkshopData } from "@/lib/types";
+import type { WorkshopData, FiveWhys } from "@/lib/types";
 
 const styles = StyleSheet.create({
   page: {
@@ -53,8 +53,19 @@ const styles = StyleSheet.create({
     marginBottom: 3,
     paddingLeft: 12,
   },
-  bullet: {
+  rootCause: {
     marginBottom: 3,
+    paddingLeft: 12,
+    color: "#0f766e",
+    fontFamily: "Helvetica-Bold",
+  },
+  goalBox: {
+    marginBottom: 8,
+    padding: 8,
+    backgroundColor: "#f0f4ff",
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: "#c7d2fe",
   },
   table: {
     marginTop: 6,
@@ -90,8 +101,17 @@ const styles = StyleSheet.create({
   },
 });
 
+const whyLabels = [
+  "Why is this cost high?",
+  "Why does that happen?",
+  "Why is that the case?",
+  "Why does that occur?",
+  "Root cause — why ultimately?",
+];
+
 export function ActionPlanDocument({ data }: { data: WorkshopData }) {
-  const { teamName, module1, module2, module3, module4 } = data;
+  const { teamName, section1, section2, section3, section4 } = data;
+  const whyKeys: (keyof FiveWhys)[] = ["w1", "w2", "w3", "w4", "w5"];
 
   return (
     <Document>
@@ -102,68 +122,74 @@ export function ActionPlanDocument({ data }: { data: WorkshopData }) {
           <Text style={styles.subtitle}>Team: {teamName}</Text>
         </View>
 
-        {/* Module 1 */}
+        {/* Section 1 */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Module 1: Fighting Cost Waste</Text>
+          <Text style={styles.sectionTitle}>Section 1: Identify the Cost Problem (5 Whys)</Text>
           <Text style={styles.text}>
             <Text style={styles.bold}>Category: </Text>
-            {module1.category}
+            {section1.category}
           </Text>
           <Text style={styles.text}>
             <Text style={styles.bold}>Focus Item: </Text>
-            {module1.selectedItem}
+            {section1.selectedItem}
           </Text>
-          <Text style={styles.label}>Ideas:</Text>
-          {module1.ideas.map((idea, i) => (
+          <Text style={styles.label}>5 Whys:</Text>
+          {whyKeys.map((key, i) =>
+            section1.fiveWhys[key] ? (
+              <Text key={key} style={i === 4 ? styles.rootCause : styles.listItem}>
+                W{i + 1} ({whyLabels[i]}): {section1.fiveWhys[key]}
+              </Text>
+            ) : null
+          )}
+          <Text style={[styles.label, { marginTop: 6 }]}>Solution Ideas:</Text>
+          {section1.solutionIdeas.map((idea, i) => (
             <Text key={i} style={styles.listItem}>
               • {idea}
             </Text>
           ))}
         </View>
 
-        {/* Module 2 */}
+        {/* Section 2 */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Module 2: One Thing to Improve</Text>
+          <Text style={styles.sectionTitle}>Section 2: SMART Goal</Text>
+          <View style={styles.goalBox}>
+            <Text style={styles.bold}>Goal Statement:</Text>
+            <Text style={styles.text}>{section2.goalStatement}</Text>
+          </View>
           <Text style={styles.text}>
-            <Text style={styles.bold}>Area: </Text>
-            {module2.area}
+            <Text style={styles.bold}>Specific: </Text>{section2.smart.specific}
           </Text>
-          {module2.currentSituation ? (
+          <Text style={styles.text}>
+            <Text style={styles.bold}>Measurable: </Text>{section2.smart.measurable}
+          </Text>
+          <Text style={styles.text}>
+            <Text style={styles.bold}>Achievable: </Text>{section2.smart.achievable}
+          </Text>
+          <Text style={styles.text}>
+            <Text style={styles.bold}>Relevant: </Text>{section2.smart.relevant}
+          </Text>
+          <Text style={styles.text}>
+            <Text style={styles.bold}>Time-bound: </Text>{section2.smart.timeBound}
+          </Text>
+          {section2.challenges.length > 0 ? (
             <>
-              <Text style={styles.label}>Current Situation:</Text>
-              <Text style={styles.text}>{module2.currentSituation}</Text>
-            </>
-          ) : null}
-          {module2.desiredOutcome ? (
-            <>
-              <Text style={styles.label}>Desired Outcome:</Text>
-              <Text style={styles.text}>{module2.desiredOutcome}</Text>
+              <Text style={styles.label}>Challenges:</Text>
+              {section2.challenges.map((c, i) => (
+                <Text key={i} style={styles.listItem}>
+                  {i + 1}. {c}
+                </Text>
+              ))}
             </>
           ) : null}
         </View>
 
-        {/* Module 3 */}
+        {/* Section 3 */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Module 3: Goal & Challenges</Text>
-          <Text style={styles.label}>Goal:</Text>
-          <Text style={styles.text}>{module3.goal}</Text>
-          <Text style={styles.label}>Challenges:</Text>
-          {module3.challenges.map((c, i) => (
+          <Text style={styles.sectionTitle}>Section 3: Breakdown & Actions (OKR-lite)</Text>
+          <Text style={styles.label}>Key Results:</Text>
+          {section3.keyResults.map((kr, i) => (
             <Text key={i} style={styles.listItem}>
-              {i + 1}. {c}
-            </Text>
-          ))}
-        </View>
-
-        {/* Module 4 */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>
-            Module 4: Breakdown & Action Plan
-          </Text>
-          <Text style={styles.label}>Sub-Goals:</Text>
-          {module4.subGoals.map((sg, i) => (
-            <Text key={i} style={styles.listItem}>
-              {i + 1}. {sg}
+              {i + 1}. {kr}
             </Text>
           ))}
 
@@ -174,7 +200,7 @@ export function ActionPlanDocument({ data }: { data: WorkshopData }) {
               <Text style={[styles.colOwner, styles.bold]}>Owner</Text>
               <Text style={[styles.colDate, styles.bold]}>Due Date</Text>
             </View>
-            {module4.actions.map((a, i) => (
+            {section3.actions.map((a, i) => (
               <View key={i} style={styles.tableRow}>
                 <Text style={styles.colAction}>{a.description}</Text>
                 <Text style={styles.colOwner}>{a.owner}</Text>
@@ -184,8 +210,29 @@ export function ActionPlanDocument({ data }: { data: WorkshopData }) {
           </View>
         </View>
 
+        {/* Section 4 */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Section 4: Reflection</Text>
+          <Text style={styles.text}>
+            <Text style={styles.bold}>Area to Improve: </Text>
+            {section4.improvementArea}
+          </Text>
+          {section4.currentSituation ? (
+            <>
+              <Text style={styles.label}>Current Situation:</Text>
+              <Text style={styles.text}>{section4.currentSituation}</Text>
+            </>
+          ) : null}
+          {section4.desiredOutcome ? (
+            <>
+              <Text style={styles.label}>Desired Outcome (3 months):</Text>
+              <Text style={styles.text}>{section4.desiredOutcome}</Text>
+            </>
+          ) : null}
+        </View>
+
         <Text style={styles.footer}>
-          Generated by Fighting Crisis Workshop Tool
+          Generated by Fighting Crisis Workshop Tool — Geohan Corporation Berhad
         </Text>
       </Page>
     </Document>
