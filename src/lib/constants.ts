@@ -6,18 +6,18 @@ export interface CategoryInfo {
 
 export const BUDGET_CATEGORIES: CategoryInfo[] = [
   // MATERIAL
-  { name: "Materials", description: "Concrete, steel, aggregates, cement, consumable raw inputs", group: "MATERIAL" },
-  { name: "Consumables & Short-life Hardware (<2yr)", description: "Drill bits, casings, tremie pipes, hoses, PPE", group: "MATERIAL" },
-  { name: "Site Assets & Long-life Hardware (>2yr)", description: "Rigs, cranes, generators, containers, vehicles", group: "MATERIAL" },
+  { name: "Materials", description: "Concrete, steel, rebar, casing, grout, sand, aggregate, pipes, formwork", group: "MATERIAL" },
+  { name: "Consumables & Short-life Hardware (<2yr)", description: "PPE, drill bits, blades, filters, small tools", group: "MATERIAL" },
+  { name: "Site Assets & Long-life Hardware (>2yr)", description: "Generators (owned), survey instruments, machinery", group: "MATERIAL" },
   // MANPOWER
-  { name: "Labour", description: "Direct workers — OT, levies, agency fees, training", group: "MANPOWER" },
-  { name: "Staff", description: "Salaried site & office personnel, benefits, claims", group: "MANPOWER" },
+  { name: "Labour", description: "Direct workers, foreign workers, levies, permits, OT, allowances, agency fees", group: "MANPOWER" },
+  { name: "Staff", description: "Headcount, staff overhead efficiency, staff welfare and staff related costs", group: "MANPOWER" },
   // MACHINERY
-  { name: "Hiring - Equipment & Plant", description: "Rig hire, crane hire, pump hire, fuel, maintenance", group: "MACHINERY" },
-  { name: "Logistics", description: "Transport, mobilisation, waste disposal, site services", group: "MACHINERY" },
+  { name: "Hiring - Equipment & Plant", description: "Rig, crane, pump, generator, survey equipment hire", group: "MACHINERY" },
+  { name: "Logistics", description: "Transport, haulage, mobilisation, fuel for vehicles, site deliveries", group: "MACHINERY" },
   // SUBCONTRACTOR
-  { name: "RC Subcontractors", description: "Reinforced-concrete piling subcontractors", group: "SUBCONTRACTOR" },
-  { name: "Non-RC Subcontractors", description: "Other specialist subcontractors (testing, survey, etc.)", group: "SUBCONTRACTOR" },
+  { name: "RC Subcontractors", description: "Piling, structural concrete, RC elements", group: "SUBCONTRACTOR" },
+  { name: "Non-RC Subcontractors", description: "M&E, waterproofing, landscaping, fencing, etc.", group: "SUBCONTRACTOR" },
 ];
 
 export const CATEGORY_GROUPS = ["MATERIAL", "MANPOWER", "MACHINERY", "SUBCONTRACTOR"] as const;
