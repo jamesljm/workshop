@@ -18,13 +18,14 @@ const styles = StyleSheet.create({
   header: {
     marginBottom: 20,
     borderBottomWidth: 2,
-    borderBottomColor: "#171717",
+    borderBottomColor: "#dc2626",
     paddingBottom: 12,
   },
   title: {
     fontSize: 22,
     fontFamily: "Helvetica-Bold",
     marginBottom: 4,
+    color: "#dc2626",
   },
   subtitle: {
     fontSize: 12,
@@ -37,9 +38,10 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontFamily: "Helvetica-Bold",
     marginBottom: 8,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#fef2f2",
     padding: 8,
     borderRadius: 4,
+    color: "#991b1b",
   },
   label: {
     fontFamily: "Helvetica-Bold",
@@ -56,23 +58,23 @@ const styles = StyleSheet.create({
   rootCause: {
     marginBottom: 3,
     paddingLeft: 12,
-    color: "#0f766e",
+    color: "#dc2626",
     fontFamily: "Helvetica-Bold",
   },
   goalBox: {
     marginBottom: 8,
     padding: 8,
-    backgroundColor: "#f0f4ff",
+    backgroundColor: "#fef2f2",
     borderRadius: 4,
     borderWidth: 1,
-    borderColor: "#c7d2fe",
+    borderColor: "#fca5a5",
   },
   table: {
     marginTop: 6,
   },
   tableHeader: {
     flexDirection: "row",
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#fef2f2",
     borderBottomWidth: 1,
     borderBottomColor: "#ddd",
     padding: 6,
@@ -86,6 +88,9 @@ const styles = StyleSheet.create({
   colAction: { flex: 3 },
   colOwner: { flex: 1 },
   colDate: { flex: 1 },
+  colName: { flex: 1 },
+  colRole: { flex: 1 },
+  colCommitment: { flex: 3 },
   bold: { fontFamily: "Helvetica-Bold" },
   footer: {
     position: "absolute",
@@ -102,29 +107,30 @@ const styles = StyleSheet.create({
 });
 
 const whyLabels = [
-  "Why is this cost high?",
+  "Why is this a problem right now?",
   "Why does that happen?",
-  "Why is that the case?",
-  "Why does that occur?",
-  "Root cause — why ultimately?",
+  "Why does that happen?",
+  "Why does that happen?",
+  "Why does that happen? — Root cause",
 ];
 
 export function ActionPlanDocument({ data }: { data: WorkshopData }) {
   const { teamName, section1, section2, section3, section4 } = data;
   const whyKeys: (keyof FiveWhys)[] = ["w1", "w2", "w3", "w4", "w5"];
+  const hasCommitments = section4.personalCommitments?.some((c) => c.commitment);
 
   return (
     <Document>
       <Page size="A4" style={styles.page}>
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.title}>Fighting Crisis — Action Plan</Text>
+          <Text style={styles.title}>Code Red: Ground Zero — Action Plan</Text>
           <Text style={styles.subtitle}>Team: {teamName}</Text>
         </View>
 
-        {/* Section 1 */}
+        {/* Mission 1 */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Section 1: Identify the Cost Problem (5 Whys)</Text>
+          <Text style={styles.sectionTitle}>Mission 1: IDENTIFY THE THREAT (5 Whys)</Text>
           <Text style={styles.text}>
             <Text style={styles.bold}>Category: </Text>
             {section1.category}
@@ -141,17 +147,17 @@ export function ActionPlanDocument({ data }: { data: WorkshopData }) {
               </Text>
             ) : null
           )}
-          <Text style={[styles.label, { marginTop: 6 }]}>Solution Ideas:</Text>
+          <Text style={[styles.label, { marginTop: 6 }]}>Solutions (A-D):</Text>
           {section1.solutionIdeas.map((idea, i) => (
             <Text key={i} style={styles.listItem}>
-              • {idea}
+              {String.fromCharCode(65 + i)}. {idea}
             </Text>
           ))}
         </View>
 
-        {/* Section 2 */}
+        {/* Mission 2 */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Section 2: SMART Goal</Text>
+          <Text style={styles.sectionTitle}>Mission 2: LOCK IN THE OBJECTIVE (SMART)</Text>
           <View style={styles.goalBox}>
             <Text style={styles.bold}>Goal Statement:</Text>
             <Text style={styles.text}>{section2.goalStatement}</Text>
@@ -183,9 +189,9 @@ export function ActionPlanDocument({ data }: { data: WorkshopData }) {
           ) : null}
         </View>
 
-        {/* Section 3 */}
+        {/* Mission 3 */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Section 3: Breakdown & Actions (OKR-lite)</Text>
+          <Text style={styles.sectionTitle}>Mission 3: PLAN THE ATTACK (OKR-lite)</Text>
           <Text style={styles.label}>Key Results:</Text>
           {section3.keyResults.map((kr, i) => (
             <Text key={i} style={styles.listItem}>
@@ -210,9 +216,9 @@ export function ActionPlanDocument({ data }: { data: WorkshopData }) {
           </View>
         </View>
 
-        {/* Section 4 */}
+        {/* Mission 4 */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Section 4: Reflection</Text>
+          <Text style={styles.sectionTitle}>Mission 4: KNOW YOUR WEAKNESS (Commitment)</Text>
           <Text style={styles.text}>
             <Text style={styles.bold}>Area to Improve: </Text>
             {section4.improvementArea}
@@ -229,10 +235,31 @@ export function ActionPlanDocument({ data }: { data: WorkshopData }) {
               <Text style={styles.text}>{section4.desiredOutcome}</Text>
             </>
           ) : null}
+          {hasCommitments ? (
+            <>
+              <Text style={[styles.label, { marginTop: 8 }]}>Personal Commitments:</Text>
+              <View style={styles.table}>
+                <View style={styles.tableHeader}>
+                  <Text style={[styles.colName, styles.bold]}>Name</Text>
+                  <Text style={[styles.colRole, styles.bold]}>Role</Text>
+                  <Text style={[styles.colCommitment, styles.bold]}>Commitment</Text>
+                </View>
+                {section4.personalCommitments
+                  .filter((c) => c.commitment)
+                  .map((c, i) => (
+                    <View key={i} style={styles.tableRow}>
+                      <Text style={styles.colName}>{c.name}</Text>
+                      <Text style={styles.colRole}>{c.role}</Text>
+                      <Text style={styles.colCommitment}>{c.commitment}</Text>
+                    </View>
+                  ))}
+              </View>
+            </>
+          ) : null}
         </View>
 
         <Text style={styles.footer}>
-          Generated by Fighting Crisis Workshop Tool — Geohan Corporation Berhad
+          Code Red: Ground Zero — Geohan Corporation Berhad — H1 2026
         </Text>
       </Page>
     </Document>

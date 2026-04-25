@@ -10,10 +10,10 @@ import {
   Download,
   RotateCcw,
   ChevronLeft,
-  DollarSign,
+  Crosshair,
   Target,
-  ListChecks,
-  Heart,
+  Swords,
+  ShieldAlert,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useState } from "react";
@@ -40,7 +40,7 @@ export function ActionPlanView() {
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `action-plan-${teamName.toLowerCase().replace(/\s+/g, "-")}.pdf`;
+      a.download = `code-red-${teamName.toLowerCase().replace(/\s+/g, "-")}.pdf`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -60,7 +60,7 @@ export function ActionPlanView() {
 
   const handleBack = () => {
     setCurrentSection(4);
-    router.push("/workshop/section-4");
+    router.push("/workshop/mission-4");
   };
 
   const whyKeys = ["w1", "w2", "w3", "w4", "w5"] as const;
@@ -70,7 +70,7 @@ export function ActionPlanView() {
       <div className="flex items-center justify-between">
         <div>
           <Badge variant="secondary" className="mb-2">
-            Workshop Complete
+            All Missions Complete
           </Badge>
           <h1 className="text-2xl font-bold">Action Plan</h1>
           <p className="text-muted-foreground">Team: {teamName}</p>
@@ -83,12 +83,12 @@ export function ActionPlanView() {
 
       <Separator />
 
-      {/* Section 1 */}
+      {/* Mission 1 */}
       <Card>
         <CardHeader className="pb-3">
           <CardTitle className="text-lg flex items-center gap-2">
-            <DollarSign className="h-5 w-5" />
-            Section 1: Identify the Cost Problem
+            <Crosshair className="h-5 w-5" />
+            Mission 1: IDENTIFY THE THREAT
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-2 text-sm">
@@ -110,7 +110,7 @@ export function ActionPlanView() {
             <div className="mt-1 ml-4 space-y-1">
               {whyKeys.map((key, i) => (
                 section1.fiveWhys[key] && (
-                  <p key={key} className={i === 4 ? "font-semibold text-teal-700" : ""}>
+                  <p key={key} className={i === 4 ? "font-semibold text-red-700" : ""}>
                     W{i + 1} ({FIVE_WHY_PROMPTS[i]}): {section1.fiveWhys[key]}
                   </p>
                 )
@@ -118,22 +118,24 @@ export function ActionPlanView() {
             </div>
           </div>
           <div>
-            <span className="font-medium">Solution Ideas:</span>
+            <span className="font-medium">Solutions (A-D):</span>
             <ul className="mt-1 ml-4 list-disc space-y-1">
               {section1.solutionIdeas.map((idea, i) => (
-                <li key={i}>{idea}</li>
+                <li key={i}>
+                  <span className="font-medium">{String.fromCharCode(65 + i)}.</span> {idea}
+                </li>
               ))}
             </ul>
           </div>
         </CardContent>
       </Card>
 
-      {/* Section 2 */}
+      {/* Mission 2 */}
       <Card>
         <CardHeader className="pb-3">
           <CardTitle className="text-lg flex items-center gap-2">
             <Target className="h-5 w-5" />
-            Section 2: SMART Goal
+            Mission 2: LOCK IN THE OBJECTIVE
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-2 text-sm">
@@ -161,12 +163,12 @@ export function ActionPlanView() {
         </CardContent>
       </Card>
 
-      {/* Section 3 */}
+      {/* Mission 3 */}
       <Card>
         <CardHeader className="pb-3">
           <CardTitle className="text-lg flex items-center gap-2">
-            <ListChecks className="h-5 w-5" />
-            Section 3: Breakdown & Actions
+            <Swords className="h-5 w-5" />
+            Mission 3: PLAN THE ATTACK
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-3 text-sm">
@@ -210,12 +212,12 @@ export function ActionPlanView() {
         </CardContent>
       </Card>
 
-      {/* Section 4 */}
+      {/* Mission 4 */}
       <Card>
         <CardHeader className="pb-3">
           <CardTitle className="text-lg flex items-center gap-2">
-            <Heart className="h-5 w-5" />
-            Section 4: Reflection
+            <ShieldAlert className="h-5 w-5" />
+            Mission 4: KNOW YOUR WEAKNESS
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-2 text-sm">
@@ -234,13 +236,40 @@ export function ActionPlanView() {
               <p className="mt-1 text-muted-foreground">{section4.desiredOutcome}</p>
             </div>
           )}
+          {section4.personalCommitments.some((c) => c.commitment) && (
+            <div>
+              <span className="font-medium">Personal Commitments:</span>
+              <div className="mt-2 rounded-md border overflow-hidden">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b bg-muted/50">
+                      <th className="text-left p-2 font-medium">Name</th>
+                      <th className="text-left p-2 font-medium w-28">Role</th>
+                      <th className="text-left p-2 font-medium">Commitment</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {section4.personalCommitments
+                      .filter((c) => c.commitment)
+                      .map((c, i) => (
+                        <tr key={i} className="border-b last:border-0">
+                          <td className="p-2 font-medium">{c.name}</td>
+                          <td className="p-2">{c.role}</td>
+                          <td className="p-2">{c.commitment}</td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
         </CardContent>
       </Card>
 
       <div className="flex justify-between pt-4 border-t">
         <Button variant="outline" onClick={handleBack}>
           <ChevronLeft className="mr-1 h-4 w-4" />
-          Back to Section 4
+          Back to Mission 4
         </Button>
         <Button variant="outline" onClick={handleStartOver}>
           <RotateCcw className="mr-1 h-4 w-4" />

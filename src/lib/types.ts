@@ -40,14 +40,22 @@ export interface Section3Data {
   actions: ActionItem[];
 }
 
+export interface PersonalCommitment {
+  name: string;
+  role: string;
+  commitment: string;
+}
+
 export interface Section4Data {
   improvementArea: string;
   currentSituation: string;
   desiredOutcome: string;
+  personalCommitments: PersonalCommitment[];
 }
 
 export interface WorkshopData {
   teamName: string;
+  teamMembers: string[];
   section1: Section1Data;
   section2: Section2Data;
   section3: Section3Data;

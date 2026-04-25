@@ -36,7 +36,7 @@ export function SectionShell({
       router.push("/");
     } else {
       setCurrentSection(sectionNumber - 1);
-      router.push(`/workshop/section-${sectionNumber - 1}`);
+      router.push(`/workshop/mission-${sectionNumber - 1}`);
     }
   };
 
@@ -50,7 +50,7 @@ export function SectionShell({
       router.push("/workshop/summary");
     } else {
       setCurrentSection(sectionNumber + 1);
-      router.push(`/workshop/section-${sectionNumber + 1}`);
+      router.push(`/workshop/mission-${sectionNumber + 1}`);
     }
   };
 
@@ -58,7 +58,7 @@ export function SectionShell({
     <div className="mx-auto w-full max-w-4xl px-4 py-8 flex-1 flex flex-col">
       <div className="mb-6">
         <div className="flex items-center gap-2 mb-2">
-          <Badge variant="secondary">Section {sectionNumber} of 4</Badge>
+          <Badge variant="secondary">Mission {sectionNumber} of 4</Badge>
           <Badge variant="outline">{framework}</Badge>
           <Badge variant="outline" className="text-muted-foreground">{time}</Badge>
         </div>
@@ -74,7 +74,7 @@ export function SectionShell({
           Back
         </Button>
         <Button onClick={handleNext}>
-          {sectionNumber === 4 ? "Complete Workshop" : "Next Section"}
+          {sectionNumber === 4 ? "Mission Complete" : "Next Mission"}
           <ChevronRight className="ml-1 h-4 w-4" />
         </Button>
       </div>

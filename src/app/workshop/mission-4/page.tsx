@@ -3,11 +3,11 @@
 import { useWorkshopStore } from "@/store/workshop-store";
 import { SectionShell } from "@/components/workshop/SectionShell";
 import { ReflectForm } from "@/components/workshop/ReflectForm";
-import { SECTION_TITLES } from "@/lib/constants";
+import { MISSION_TITLES } from "@/lib/constants";
 
-export default function Section4Page() {
+export default function Mission4Page() {
   const section4 = useWorkshopStore((s) => s.section4);
-  const s = SECTION_TITLES[3];
+  const s = MISSION_TITLES[3];
 
   const canAdvance = Boolean(section4.improvementArea);
 
@@ -19,7 +19,7 @@ export default function Section4Page() {
       framework={s.framework}
       time={s.time}
       canAdvance={canAdvance}
-      validationMessage="Select an improvement area to complete the workshop."
+      validationMessage="Select an improvement area to complete the mission."
     >
       <ReflectForm />
     </SectionShell>

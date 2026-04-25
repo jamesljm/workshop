@@ -1,39 +1,48 @@
 export interface CategoryInfo {
   name: string;
   description: string;
+  group: string;
 }
 
 export const BUDGET_CATEGORIES: CategoryInfo[] = [
-  { name: "Software & Licences", description: "ERP, M365, design tools, cloud storage, site apps" },
-  { name: "Equipment & Plant", description: "Rig hire, fuel, maintenance, small tools, insurance" },
-  { name: "Labour & Subcontractors", description: "OT, levies, subcon mark-ups, agency fees, training" },
-  { name: "Materials & Logistics", description: "Concrete, steel, diesel, transport, waste disposal" },
-  { name: "Admin & Overheads", description: "Office rental, printing, travel, bank charges, legal fees" },
-  { name: "Compliance & Safety", description: "DOSH, PPE, safety officer, bonds, environmental" },
+  // MATERIAL
+  { name: "Materials", description: "Concrete, steel, aggregates, cement, consumable raw inputs", group: "MATERIAL" },
+  { name: "Consumables & Short-life Hardware (<2yr)", description: "Drill bits, casings, tremie pipes, hoses, PPE", group: "MATERIAL" },
+  { name: "Site Assets & Long-life Hardware (>2yr)", description: "Rigs, cranes, generators, containers, vehicles", group: "MATERIAL" },
+  // MANPOWER
+  { name: "Labour", description: "Direct workers — OT, levies, agency fees, training", group: "MANPOWER" },
+  { name: "Staff", description: "Salaried site & office personnel, benefits, claims", group: "MANPOWER" },
+  // MACHINERY
+  { name: "Hiring - Equipment & Plant", description: "Rig hire, crane hire, pump hire, fuel, maintenance", group: "MACHINERY" },
+  { name: "Logistics", description: "Transport, mobilisation, waste disposal, site services", group: "MACHINERY" },
+  // SUBCONTRACTOR
+  { name: "RC Subcontractors", description: "Reinforced-concrete piling subcontractors", group: "SUBCONTRACTOR" },
+  { name: "Non-RC Subcontractors", description: "Other specialist subcontractors (testing, survey, etc.)", group: "SUBCONTRACTOR" },
 ];
 
+export const CATEGORY_GROUPS = ["MATERIAL", "MANPOWER", "MACHINERY", "SUBCONTRACTOR"] as const;
+
 export const FIVE_WHY_PROMPTS = [
-  "Why is this cost high?",
+  "Why is [your item] a problem right now?",
   "Why does that happen?",
-  "Why is that the case?",
-  "Why does that occur?",
-  "Root cause — why ultimately?",
+  "Why does that happen?",
+  "Why does that happen?",
+  "Why does that happen? — This is your root cause.",
 ] as const;
 
 export const IMPROVEMENT_AREAS: { name: string; description: string }[] = [
   { name: "Communication", description: "Information flow between site, office, and management" },
-  { name: "Planning & Scheduling", description: "How well work is sequenced and tracked ahead of time" },
-  { name: "Cost Discipline", description: "How consistently teams stick to budgets and flag variance" },
-  { name: "Decision Speed", description: "How quickly teams act without escalating everything" },
-  { name: "Accountability", description: "Whether ownership is clear and follow-through is reliable" },
-  { name: "Collaboration", description: "How well the team works across functions" },
+  { name: "Planning & Scheduling", description: "Work sequencing and tracking ahead of time" },
+  { name: "Cost Discipline", description: "Sticking to budgets and flagging variance early" },
+  { name: "Decision Speed", description: "Acting quickly without escalating everything" },
+  { name: "Accountability", description: "Clear ownership and reliable follow-through" },
+  { name: "Collaboration", description: "Working across functions without silos" },
   { name: "Quality & Rework", description: "Reducing errors, snagging, and corrections" },
-  { name: "Morale & Motivation", description: "Team energy and commitment during tough periods" },
 ];
 
-export const SECTION_TITLES = [
-  { number: 1, title: "Identify the Cost Problem", description: "Choose a cost category, propose items, run 5 Whys, and brainstorm solutions.", framework: "5 Whys", time: "15 min" },
-  { number: 2, title: "Set a Goal", description: "Translate your root cause into a SMART goal with measurable targets.", framework: "SMART", time: "10 min" },
-  { number: 3, title: "Break It Down", description: "Zoom from your 3-month goal into monthly milestones and this-week tasks.", framework: "OKR-lite", time: "15 min" },
-  { number: 4, title: "Reflect", description: "Identify the single biggest behaviour change your team needs.", framework: "Reflection", time: "10 min" },
+export const MISSION_TITLES = [
+  { number: 1, title: "IDENTIFY THE THREAT", description: "Choose a cost category, list items, focus on one, run 5 Whys, brainstorm solutions.", framework: "5 Whys", time: "20 min" },
+  { number: 2, title: "LOCK IN THE OBJECTIVE", description: "Translate your root cause into a SMART goal with measurable targets.", framework: "SMART", time: "20 min" },
+  { number: 3, title: "PLAN THE ATTACK", description: "Zoom from your 3-month goal into monthly milestones and this-week tasks.", framework: "OKR-lite", time: "20 min" },
+  { number: 4, title: "KNOW YOUR WEAKNESS", description: "Identify the single biggest behaviour change and make personal commitments.", framework: "Commitment", time: "10 min" },
 ] as const;

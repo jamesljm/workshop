@@ -5,7 +5,7 @@ import { useWorkshopStore } from "@/store/workshop-store";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Plus, X, Target, CalendarDays, User } from "lucide-react";
+import { Plus, X, Target, CalendarDays, User, AlertTriangle } from "lucide-react";
 import type { ActionItem } from "@/lib/types";
 
 export function OKRBreakdownForm() {
@@ -40,17 +40,30 @@ export function OKRBreakdownForm() {
 
   return (
     <div className="space-y-6">
-      {/* Read-only objective from S2 */}
+      {/* Blackout Rule */}
+      <div className="rounded-lg border-2 border-red-500 bg-red-50 p-4">
+        <div className="flex items-start gap-2">
+          <AlertTriangle className="h-5 w-5 text-red-600 shrink-0 mt-0.5" />
+          <div>
+            <p className="text-sm font-bold text-red-700">BLACKOUT RULE</p>
+            <p className="text-xs text-red-600 mt-1">
+              No action leaves this table without a FULL NAME and a DATE. &ldquo;The team&rdquo; is not a name. &ldquo;ASAP&rdquo; is not a date.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Read-only objective from M2 */}
       <Card className="bg-muted/50">
         <CardContent className="p-4">
           <div className="flex items-start gap-2">
             <Target className="h-5 w-5 text-primary shrink-0 mt-0.5" />
             <div>
               <p className="text-xs font-medium text-muted-foreground mb-1">
-                Objective (from Section 2)
+                Objective (from M2)
               </p>
               <p className="text-sm font-medium">
-                {section2.goalStatement || "No goal set yet — go back to Section 2"}
+                {section2.goalStatement || "No goal set yet — go back to M2"}
               </p>
             </div>
           </div>
@@ -61,9 +74,9 @@ export function OKRBreakdownForm() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Key Results (left) */}
         <div>
-          <h3 className="text-sm font-medium mb-1">Key Results</h3>
+          <h3 className="text-sm font-medium mb-1">Key Results (yes/no test)</h3>
           <p className="text-xs text-muted-foreground mb-3">
-            3–5 monthly milestones. Each should have a clear yes/no completion state.
+            3-5 monthly milestones. Each should have a clear yes/no completion state.
           </p>
           {section3.keyResults.length > 0 && (
             <ul className="space-y-2 mb-3">
@@ -108,7 +121,7 @@ export function OKRBreakdownForm() {
         <div>
           <h3 className="text-sm font-medium mb-1">This Week&apos;s Actions</h3>
           <p className="text-xs text-muted-foreground mb-3">
-            3–5 tasks with a named owner and due date.
+            3-5 tasks with a named owner and due date.
           </p>
           {section3.actions.length > 0 && (
             <div className="space-y-2 mb-3">
@@ -149,7 +162,7 @@ export function OKRBreakdownForm() {
                 <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   className="pl-9"
-                  placeholder="Owner"
+                  placeholder="FULL NAME of owner"
                   value={actionOwner}
                   onChange={(e) => setActionOwner(e.target.value)}
                 />

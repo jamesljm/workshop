@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useWorkshopStore } from "@/store/workshop-store";
 import { Progress } from "@/components/ui/progress";
-import { SECTION_TITLES } from "@/lib/constants";
+import { MISSION_TITLES } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { Check } from "lucide-react";
 
@@ -15,13 +15,12 @@ export function ProgressBar() {
   const progress = currentSection >= 5 ? 100 : ((currentSection - 1) / 4) * 100;
 
   const navigateTo = (section: number) => {
-    // Only allow navigating to completed sections or current
     if (section > currentSection) return;
     setCurrentSection(section);
     if (section === 5) {
       router.push("/workshop/summary");
     } else {
-      router.push(`/workshop/section-${section}`);
+      router.push(`/workshop/mission-${section}`);
     }
   };
 
@@ -34,13 +33,13 @@ export function ProgressBar() {
           </h2>
           <span className="text-xs text-muted-foreground">
             {currentSection >= 5
-              ? "Workshop Complete"
-              : `Section ${currentSection} of 4`}
+              ? "All Missions Complete"
+              : `Mission ${currentSection} of 4`}
           </span>
         </div>
         <Progress value={progress} className="mb-3" />
         <div className="flex gap-1">
-          {SECTION_TITLES.map((s) => {
+          {MISSION_TITLES.map((s) => {
             const isCompleted = currentSection > s.number;
             const isCurrent = currentSection === s.number;
             const isClickable = s.number <= currentSection;
@@ -58,7 +57,7 @@ export function ProgressBar() {
               >
                 <span className="flex items-center justify-center gap-1">
                   {isCompleted && <Check className="h-3 w-3" />}
-                  S{s.number}: {s.title}
+                  M{s.number}: {s.title}
                 </span>
               </button>
             );

@@ -9,8 +9,8 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
-  title: "Fighting Crisis — Manager Workshop",
-  description: "Interactive workshop tool for Geohan manager conference",
+  title: "Code Red: Ground Zero — Team Documentation",
+  description: "Interactive workshop tool for Geohan Corporation Berhad — H1 2026",
 };
 
 export default function RootLayout({

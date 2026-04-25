@@ -3,11 +3,11 @@
 import { useWorkshopStore } from "@/store/workshop-store";
 import { SectionShell } from "@/components/workshop/SectionShell";
 import { CostProblemForm } from "@/components/workshop/CostProblemForm";
-import { SECTION_TITLES } from "@/lib/constants";
+import { MISSION_TITLES } from "@/lib/constants";
 
-export default function Section1Page() {
+export default function Mission1Page() {
   const section1 = useWorkshopStore((s) => s.section1);
-  const s = SECTION_TITLES[0];
+  const s = MISSION_TITLES[0];
 
   const canAdvance = Boolean(
     section1.category &&

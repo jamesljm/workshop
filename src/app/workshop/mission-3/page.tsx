@@ -3,11 +3,11 @@
 import { useWorkshopStore } from "@/store/workshop-store";
 import { SectionShell } from "@/components/workshop/SectionShell";
 import { OKRBreakdownForm } from "@/components/workshop/OKRBreakdownForm";
-import { SECTION_TITLES } from "@/lib/constants";
+import { MISSION_TITLES } from "@/lib/constants";
 
-export default function Section3Page() {
+export default function Mission3Page() {
   const section3 = useWorkshopStore((s) => s.section3);
-  const s = SECTION_TITLES[2];
+  const s = MISSION_TITLES[2];
 
   const hasValidAction = section3.actions.some(
     (a) => a.description.trim() && a.owner.trim() && a.dueDate

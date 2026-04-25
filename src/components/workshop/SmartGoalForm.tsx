@@ -16,7 +16,7 @@ export function SmartGoalForm() {
 
   const handleAddChallenge = () => {
     const trimmed = challengeInput.trim();
-    if (trimmed) {
+    if (trimmed && section2.challenges.length < 5) {
       store.addChallenge(trimmed);
       setChallengeInput("");
     }
@@ -24,14 +24,21 @@ export function SmartGoalForm() {
 
   return (
     <div className="space-y-6">
-      {/* Context pills from Section 1 */}
+      {/* Context pills from M1 */}
       <div className="flex flex-wrap gap-2">
         <Badge variant="outline" className="text-sm py-1 px-3">
           Cost item: {section1.selectedItem || "—"}
         </Badge>
-        <Badge variant="outline" className="text-sm py-1 px-3 border-teal-300 text-teal-700">
+        <Badge variant="outline" className="text-sm py-1 px-3 border-red-300 text-red-700">
           Root cause (W5): {section1.fiveWhys.w5 || "—"}
         </Badge>
+      </div>
+
+      {/* Callout */}
+      <div className="rounded-lg border border-red-200 bg-red-50 p-3">
+        <p className="text-xs font-semibold text-red-700">
+          M and T are the most commonly missed — make sure both include a concrete number or date.
+        </p>
       </div>
 
       {/* SMART fields */}
@@ -42,7 +49,7 @@ export function SmartGoalForm() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
           <div>
             <label className="text-xs font-medium text-muted-foreground mb-1 block">
-              S — Specific: What exactly will change?
+              S — What exactly changes?
             </label>
             <Textarea
               placeholder="e.g. Reduce diesel consumption on all active sites..."
@@ -52,8 +59,9 @@ export function SmartGoalForm() {
             />
           </div>
           <div>
-            <label className="text-xs font-medium text-muted-foreground mb-1 block">
-              M — Measurable: By how much? (number or %)
+            <label className="text-xs font-medium text-muted-foreground mb-1 flex items-center gap-2">
+              M — By how much? (%, RM, days)
+              <Badge variant="destructive" className="text-[10px] px-1.5 py-0">MUST include a number</Badge>
             </label>
             <Textarea
               placeholder="e.g. 30% reduction in monthly diesel spend..."
@@ -64,7 +72,7 @@ export function SmartGoalForm() {
           </div>
           <div>
             <label className="text-xs font-medium text-muted-foreground mb-1 block">
-              A — Achievable: How is this realistic?
+              A — Why is this realistic?
             </label>
             <Textarea
               placeholder="e.g. By enforcing a 7PM generator curfew policy..."
@@ -75,7 +83,7 @@ export function SmartGoalForm() {
           </div>
           <div>
             <label className="text-xs font-medium text-muted-foreground mb-1 block">
-              R — Relevant: Why does this matter now?
+              R — Tied to M1 cost item?
             </label>
             <Textarea
               placeholder="e.g. Diesel is our largest controllable cost and prices rose 15%..."
@@ -86,8 +94,9 @@ export function SmartGoalForm() {
           </div>
         </div>
         <div>
-          <label className="text-xs font-medium text-muted-foreground mb-1 block">
-            T — Time-bound: By when?
+          <label className="text-xs font-medium text-muted-foreground mb-1 flex items-center gap-2">
+            T — By when?
+            <Badge variant="destructive" className="text-[10px] px-1.5 py-0">MUST include a date</Badge>
           </label>
           <Input
             placeholder="e.g. 31 July 2026"
@@ -99,21 +108,19 @@ export function SmartGoalForm() {
 
       {/* Goal preview */}
       {(section2.smart.specific || section2.smart.measurable) && (
-        <>
-          <div className="rounded-lg border-2 border-primary/20 bg-primary/5 p-4">
-            <p className="text-xs font-medium text-primary/70 mb-1">Goal Preview (auto-assembled)</p>
-            <p className="text-sm font-medium">
-              {section2.goalStatement || "Fill in the SMART fields above to see your goal statement..."}
-            </p>
-          </div>
-        </>
+        <div className="rounded-lg border-2 border-primary/20 bg-primary/5 p-4">
+          <p className="text-xs font-medium text-primary/70 mb-1">Goal Preview (auto-assembled)</p>
+          <p className="text-sm font-medium">
+            {section2.goalStatement || "Fill in the SMART fields above to see your goal statement..."}
+          </p>
+        </div>
       )}
 
       {/* Challenges */}
       <Separator />
       <div>
         <h3 className="text-sm font-medium mb-1">
-          Challenges
+          Challenges (3-5)
         </h3>
         <p className="text-xs text-muted-foreground mb-3">
           What obstacles stand in the way of this goal? Be specific.
@@ -139,22 +146,24 @@ export function SmartGoalForm() {
             ))}
           </ul>
         )}
-        <div className="flex gap-2">
-          <Input
-            placeholder="Type a challenge and press Enter..."
-            value={challengeInput}
-            onChange={(e) => setChallengeInput(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleAddChallenge()}
-          />
-          <Button
-            size="icon"
-            variant="outline"
-            onClick={handleAddChallenge}
-            disabled={!challengeInput.trim()}
-          >
-            <Plus className="h-4 w-4" />
-          </Button>
-        </div>
+        {section2.challenges.length < 5 && (
+          <div className="flex gap-2">
+            <Input
+              placeholder="Type a challenge and press Enter..."
+              value={challengeInput}
+              onChange={(e) => setChallengeInput(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleAddChallenge()}
+            />
+            <Button
+              size="icon"
+              variant="outline"
+              onClick={handleAddChallenge}
+              disabled={!challengeInput.trim()}
+            >
+              <Plus className="h-4 w-4" />
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );
