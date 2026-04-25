@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { WorkshopData, ActionItem, FiveWhys, SmartGoal, PersonalCommitment } from "@/lib/types";
+import { saveToServer } from "@/lib/sync";
 
 const emptyFiveWhys: FiveWhys = { w1: "", w2: "", w3: "", w4: "", w5: "" };
 const emptySmart: SmartGoal = { specific: "", measurable: "", achievable: "", relevant: "", timeBound: "" };
@@ -59,6 +60,7 @@ interface WorkshopStore extends WorkshopData {
   // Navigation
   setCurrentSection: (section: number) => void;
 
+  loadData: (data: WorkshopData, currentSection: number) => void;
   reset: () => void;
   getData: () => WorkshopData;
 }
@@ -193,7 +195,24 @@ export const useWorkshopStore = create<WorkshopStore>()(
           return { section4: { ...state.section4, personalCommitments: commitments } };
         }),
 
-      setCurrentSection: (section) => set({ currentSection: section }),
+      setCurrentSection: (section) => {
+        set({ currentSection: section });
+        // Fire-and-forget save to server
+        const state = get();
+        if (state.teamName) {
+          saveToServer(state.teamName, {
+            teamName: state.teamName,
+            teamMembers: state.teamMembers,
+            section1: state.section1,
+            section2: state.section2,
+            section3: state.section3,
+            section4: state.section4,
+          }, section);
+        }
+      },
+
+      loadData: (data, currentSection) =>
+        set({ ...data, currentSection }),
 
       reset: () => set({ ...initialData, currentSection: 0 }),
 

@@ -19,21 +19,28 @@ import { toast } from "sonner";
 import { useState } from "react";
 import { format } from "date-fns";
 import { FIVE_WHY_PROMPTS } from "@/lib/constants";
+import type { WorkshopData } from "@/lib/types";
 
-export function ActionPlanView() {
+interface ActionPlanViewProps {
+  data?: WorkshopData;
+  readOnly?: boolean;
+}
+
+export function ActionPlanView({ data: externalData, readOnly }: ActionPlanViewProps) {
   const router = useRouter();
   const store = useWorkshopStore();
-  const { section1, section2, section3, section4, teamName, reset, setCurrentSection } = store;
   const [downloading, setDownloading] = useState(false);
+
+  const source = externalData ?? store.getData();
+  const { section1, section2, section3, section4, teamName } = source;
 
   const handleDownloadPdf = async () => {
     setDownloading(true);
     try {
-      const data = store.getData();
       const res = await fetch("/api/pdf", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify(source),
       });
       if (!res.ok) throw new Error("PDF generation failed");
       const blob = await res.blob();
@@ -54,12 +61,12 @@ export function ActionPlanView() {
   };
 
   const handleStartOver = () => {
-    reset();
+    store.reset();
     router.push("/");
   };
 
   const handleBack = () => {
-    setCurrentSection(4);
+    store.setCurrentSection(4);
     router.push("/workshop/mission-4");
   };
 
@@ -70,7 +77,7 @@ export function ActionPlanView() {
       <div className="flex items-center justify-between">
         <div>
           <Badge variant="secondary" className="mb-2">
-            All Missions Complete
+            {readOnly ? "Admin View" : "All Missions Complete"}
           </Badge>
           <h1 className="text-2xl font-bold">Action Plan</h1>
           <p className="text-muted-foreground">Team: {teamName}</p>
@@ -266,16 +273,18 @@ export function ActionPlanView() {
         </CardContent>
       </Card>
 
-      <div className="flex justify-between pt-4 border-t">
-        <Button variant="outline" onClick={handleBack}>
-          <ChevronLeft className="mr-1 h-4 w-4" />
-          Back to Mission 4
-        </Button>
-        <Button variant="outline" onClick={handleStartOver}>
-          <RotateCcw className="mr-1 h-4 w-4" />
-          Start Over
-        </Button>
-      </div>
+      {!readOnly && (
+        <div className="flex justify-between pt-4 border-t">
+          <Button variant="outline" onClick={handleBack}>
+            <ChevronLeft className="mr-1 h-4 w-4" />
+            Back to Mission 4
+          </Button>
+          <Button variant="outline" onClick={handleStartOver}>
+            <RotateCcw className="mr-1 h-4 w-4" />
+            Start Over
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
